@@ -1,0 +1,20 @@
+{
+  "name": "asana-clone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hilalozturk1/ASANA-CLONE.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hilalozturk1/ASANA-CLONE/issues"
+  },
+  "homepage": "https://github.com/hilalozturk1/ASANA-CLONE#readme"
+}
