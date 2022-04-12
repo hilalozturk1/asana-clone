@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/hilalozturk1/ASANA-CLONE/issues"
   },
-  "homepage": "https://github.com/hilalozturk1/ASANA-CLONE#readme"
+  "homepage": "https://github.com/hilalozturk1/ASANA-CLONE#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
 }
