@@ -1,4 +1,7 @@
+const { insert } = require("../services/Projects");
+
 const create = (req, res) => {
+    insert({ name:"hilal", lname:"ozturk"})
     res.status(200).send("Project Create");
 };
 
