@@ -1,10 +1,11 @@
 //validations desc.
 //validate middleware
 const express = require("express");
-const { create } = require("../controllers/Projects")
+const { create, index } = require("../controllers/Projects")
 const router = express.Router();
 
-router.get("/", create)
+router.get("/", index)
+router.post("/", create)
 
 module.exports = {
     router,
