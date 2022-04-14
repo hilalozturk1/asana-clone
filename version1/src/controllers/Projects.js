@@ -1,7 +1,7 @@
 const { insert } = require("../services/Projects");
 const httpStatus = require("http-status");
 const create = (req, res) => {
-    insert({ name:"hilal"})
+    insert(req.body)
     .then((response) => {
         res.status(httpStatus.CREATED).send(response);//201
     })
