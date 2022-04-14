@@ -5,6 +5,11 @@ const insert = (projectData) => {
     return projects.save();
 };
 
+const list = () => {
+    return Project.find({});//return value with find
+}
+
 module.exports = {
-    insert
+    insert,
+    list
 }
