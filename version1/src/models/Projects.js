@@ -1,4 +1,5 @@
 const Mongoose = require("mongoose");
+const logger = require("../scripts/logger/Projects")
 
 const ProjectSchema = new Mongoose.Schema({
     name : "String",
@@ -17,6 +18,10 @@ const ProjectSchema = new Mongoose.Schema({
 
 ProjectSchema.post("save", (object) => {
     console.log("POST", object);//logging
+    logger.log({
+        level : "info",
+        message : object
+    });
 })
 
 module.exports = Mongoose.model("project", ProjectSchema)
