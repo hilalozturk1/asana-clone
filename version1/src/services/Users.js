@@ -5,11 +5,16 @@ const insert = (userData) => {
     return user.save();
 };
 
+const loginUser = (loginData) => {
+    return User.findOne(loginData)
+}
+
 const list = () => {
     return User.find({});
 };
 
 module.exports = {
     insert,
-    list
+    list,
+    loginUser
 }
