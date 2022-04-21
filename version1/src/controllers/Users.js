@@ -14,6 +14,7 @@ const create = (req, res) => {
 };
 
 const login = (req, res) => {
+    req.body.password = passwordToHash(req.body.password);
     loginUser(req.body)
         .then((user) => { 
             if(!user) 
