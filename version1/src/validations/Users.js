@@ -1,4 +1,4 @@
-const Joi = require("Joi");
+const Joi = require("joi");
 
 const createValidation = Joi.object({
     full_name : Joi.string().required().min(3),
