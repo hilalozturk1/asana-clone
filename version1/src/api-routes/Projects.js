@@ -3,13 +3,12 @@ const schemas = require("../validations/Projects");// get schemas
 //validate middleware
 const validate = require("../middlewares/validate");//get func
 const express = require("express");
-const { create, index } = require("../controllers/Projects")
+const { create, index } = require("../controllers/Projects");
+const authenticate = require("../middlewares/authenticate");
 const router = express.Router();
 
-router.get("/", index)
-router
-.route("/")
-.post(validate(schemas.createValidation), create);
+router.route("/").get(authenticate, index);
+router.route("/").post(authenticate ,validate(schemas.createValidation), create);
 
 module.exports = {
     router,
