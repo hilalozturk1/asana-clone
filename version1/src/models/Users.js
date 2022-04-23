@@ -7,4 +7,4 @@ const UserSchema = new Mongoose.Schema({
     profile_image : String
 },{ timestamps: true, versionKey: false });
 
-module.exports = Mongoose.model("model", UserSchema);
+module.exports = Mongoose.model("user", UserSchema);
