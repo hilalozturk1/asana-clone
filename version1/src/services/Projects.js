@@ -6,7 +6,10 @@ const insert = (projectData) => {
 };
 
 const list = () => {
-    return Project.find({});//return value with find
+    return Project.find({}).populate({
+        path: "user_id",
+        select: "full_name email",
+    });
 }
 
 module.exports = {
