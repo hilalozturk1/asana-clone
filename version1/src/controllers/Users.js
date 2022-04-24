@@ -3,6 +3,7 @@ const projectService = require("../services/Projects");
 const httpStatus = require("http-status");
 const { passwordToHash, generateAccessToken, generateRefreshToken } = require("../scripts/utils/helper");
 const uuid = require("uuid");
+const eventEmitter = require("../scripts/events/eventEmitter");
 
 const create = (req, res) => {
     req.body.password = passwordToHash(req.body.password);
@@ -57,6 +58,16 @@ const resetPassword = (req, res) => {
     const new_password = uuid.v4()?.split("-")[0] || new Date().getTime();
     modify({ email: req.body.email }, { password: passwordToHash(new_password) }).then((updatedUser) => {
         if(!updatedUser) return res.status(httpStatus.NOT_FOUND).send({ error : "there isn't any such user"})
+        
+        eventEmitter.emit("send_email", {
+            to: updatedUser.email,
+            subject: "Reset Password",
+            html: "Your password has been reset<br />your new password:"+new_password,
+        });
+        
+        res.status(httpStatus.OK).send({
+            message: "We have sent your new password to your email, please check it."
+        });
     }).catch(() => {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).send("an error occurred while resetting the password")
     });
