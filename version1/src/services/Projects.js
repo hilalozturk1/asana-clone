@@ -12,7 +12,12 @@ const list = () => {
     });
 }
 
+const modify = (data, id) => {
+    return Project.findByIdAndUpdate(id, data, { new: true});
+}
+
 module.exports = {
     insert,
-    list
+    list,
+    modify
 }
