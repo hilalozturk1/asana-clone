@@ -1,4 +1,5 @@
 const { insert, list, loginUser } = require("../services/Users");
+const projectService = require("../services/Projects");
 const httpStatus = require("http-status");
 const { passwordToHash, generateAccessToken, generateRefreshToken } = require("../scripts/utils/helper");
 
@@ -42,8 +43,18 @@ const index = (req, res) => {
         });
 };
 
+const projectsList = (req, res) => {
+    projectService.list({ user_id : req.user?._id}).then((projects) => {
+        res.status(httpStatus.OK).send(projects)
+    })
+    .catch(() => res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+        error: "an unexpected error occurred while fetching projects"
+    }))
+}
+
 module.exports = {
     create,
     index,
-    login
+    login,
+    projectsList
 }
