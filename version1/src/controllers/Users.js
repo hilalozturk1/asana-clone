@@ -1,7 +1,8 @@
-const { insert, list, loginUser } = require("../services/Users");
+const { insert, list, loginUser, modify } = require("../services/Users");
 const projectService = require("../services/Projects");
 const httpStatus = require("http-status");
 const { passwordToHash, generateAccessToken, generateRefreshToken } = require("../scripts/utils/helper");
+const uuid = require("uuid");
 
 const create = (req, res) => {
     req.body.password = passwordToHash(req.body.password);
@@ -52,9 +53,18 @@ const projectsList = (req, res) => {
     }))
 }
 
+const resetPassword = (req, res) => {
+    const new_password = uuid.v4()?.split("-")[0] || new Date().getTime();
+    modify({ email: req.body.email }, { password: passwordToHash(new_password) }).then((updatedUser) => {
+        if(!updatedUser) return res.status(httpStatus.NOT_FOUND).send({ error : "there isn't any such user"})
+    }).catch(() => {
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).send("an error occurred while resetting the password")
+    });
+}
 module.exports = {
     create,
     index,
     login,
-    projectsList
+    projectsList,
+    resetPassword
 }
