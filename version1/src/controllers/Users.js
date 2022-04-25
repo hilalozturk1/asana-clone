@@ -72,10 +72,20 @@ const resetPassword = (req, res) => {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).send("an error occurred while resetting the password")
     });
 }
+
+const update = (req, res) => {
+    modify({ _id: req.user?._id }, req.body).then((updatedUser) => {
+        res.status(httpStatus.OK).send(updatedUser)
+    }).catch(() => {
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error: "a problem occurred during update"})
+    })
+}
+
 module.exports = {
     create,
     index,
     login,
     projectsList,
-    resetPassword
+    resetPassword,
+    update
 }
