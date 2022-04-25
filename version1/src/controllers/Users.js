@@ -4,6 +4,7 @@ const httpStatus = require("http-status");
 const { passwordToHash, generateAccessToken, generateRefreshToken } = require("../scripts/utils/helper");
 const uuid = require("uuid");
 const eventEmitter = require("../scripts/events/eventEmitter");
+const path = require("path");
 
 const create = (req, res) => {
     req.body.password = passwordToHash(req.body.password);
@@ -108,6 +109,32 @@ const deleteUser = (req, res) => {
     }).catch((e) => { res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error : "a problem occurred during deletion process" }) })
 }
 
+const updateProfileImage = (req, res) => {
+    if(!req?.files?.profile_image) {
+        return res.status(httpStatus.BAD_REQUEST).send({
+            error: "you haven't selected any file"
+        })
+    }
+    //upload file
+    const extention = path.extname(req.files.profile_image.name);
+    const fileName = req?.user._id+extention;
+    const folderPath = path.join(__dirname, "../", "uploads/users", fileName);
+    req.files.profile_image.mv(folderPath, function(err) {
+        if(err) {
+            return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+                error: err
+            })
+        }
+        modify({ _id: req.user._id}, { profile_image: fileName }).then((updatedUser) => {
+            res.status(httpStatus.OK).send(updatedUser)
+        }).catch((e) => {
+            res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+                error: "a problem occurred during update"
+            })
+        })
+    })
+}
+
 module.exports = {
     create,
     index,
@@ -116,5 +143,6 @@ module.exports = {
     resetPassword,
     update,
     deleteUser,
-    changePassword
+    changePassword,
+    updateProfileImage
 }

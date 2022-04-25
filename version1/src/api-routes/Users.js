@@ -2,7 +2,7 @@ const schemas = require("../validations/Users");
 const validate = require("../middlewares/validate");
 const authenticate = require("../middlewares/authenticate");
 const express = require("express");
-const { create, index, login, projectsList, resetPassword, update, deleteUser, changePassword } = require("../controllers/Users");
+const { create, index, login, projectsList, resetPassword, update, deleteUser, changePassword, updateProfileImage } = require("../controllers/Users");
 
 const router = express.Router();
 
@@ -13,6 +13,7 @@ router.route("/login").post(validate(schemas.loginValidation), login);
 router.route("/projects").get(authenticate,projectsList)
 router.route("/reset-password").post(validate(schemas.resetPasswordValidation), resetPassword)
 router.route("/change-password").post(authenticate ,validate(schemas.changePasswordValidation), changePassword)
+router.route("/update-profile-image").post(authenticate, updateProfileImage);
 router.route("/:id").delete(authenticate, deleteUser)
 
 module.exports = router;
