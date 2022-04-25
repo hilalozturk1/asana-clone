@@ -17,9 +17,14 @@ const modify = (where, data) => {
     return User.findOneAndUpdate(where, data, { new: true });
 }
 
+const remove = (id) => {
+    return User.findOneAndDelete(id)
+}
+
 module.exports = {
     insert,
     list,
     loginUser,
-    modify
+    modify,
+    remove
 }

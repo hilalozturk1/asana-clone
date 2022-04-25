@@ -1,4 +1,4 @@
-const { insert, list, loginUser, modify } = require("../services/Users");
+const { insert, list, loginUser, modify, remove } = require("../services/Users");
 const projectService = require("../services/Projects");
 const httpStatus = require("http-status");
 const { passwordToHash, generateAccessToken, generateRefreshToken } = require("../scripts/utils/helper");
@@ -81,11 +81,30 @@ const update = (req, res) => {
     })
 }
 
+const deleteUser = (req, res) => {
+    if(!req.params.id) {
+        return res.status(httpStatus.BAD_REQUEST).send({
+            message : "haven't find ID info"
+        });
+    }
+    remove(req.params?.id).then((deletedUser) => {
+        if(!deletedUser){
+            return res.status(httpStatus.NOT_FOUND).send({
+                message: "no such user was found"
+            })
+        }
+        res.status(httpStatus.OK).send({
+            message: "the user has been deleted"
+        })
+    }).catch((e) => { res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error : "a problem occurred during deletion process" }) })
+}
+
 module.exports = {
     create,
     index,
     login,
     projectsList,
     resetPassword,
-    update
+    update,
+    deleteUser
 }
