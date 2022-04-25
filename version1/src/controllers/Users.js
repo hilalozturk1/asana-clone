@@ -81,6 +81,15 @@ const update = (req, res) => {
     })
 }
 
+const changePassword = (req, res) => {
+    req.body.password = passwordToHash(req.body.password);
+    modify({ _id: req.user?._id }, req.body).then((updatedUser) => {
+        res.status(httpStatus.OK).send(updatedUser)
+    }).catch(() => {
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error: "a problem occurred during cahnge"})
+    })
+}
+
 const deleteUser = (req, res) => {
     if(!req.params.id) {
         return res.status(httpStatus.BAD_REQUEST).send({
@@ -106,5 +115,6 @@ module.exports = {
     projectsList,
     resetPassword,
     update,
-    deleteUser
+    deleteUser,
+    changePassword
 }
