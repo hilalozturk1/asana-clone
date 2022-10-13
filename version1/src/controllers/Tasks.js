@@ -1,4 +1,4 @@
-const { insert, list, modify, remove } = require("../services/Tasks");
+const { insert, list, modify, remove, findOne } = require("../services/Tasks");
 const httpStatus = require("http-status");
 const create = (req, res) => {
     req.body.user_id = req.user;
@@ -47,9 +47,29 @@ const deleteTask = (req, res) => {
     }).catch((e) => { res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error : "a problem occurred during deletion process" }) })
 }
 
+const makeComment = (req, res) => {
+    findOne({ _id : req.params.id }).then((mainTask) => {//find one
+        if(!mainTask) return res.status(httpStatus.NOT_FOUND).send({message: "couldn't find this task"})
+        const comment = {
+            ...req.body,
+            commented_at : new Date(),
+            user_id : req.user
+        };
+        mainTask.comments.push(comment);
+        mainTask
+            .save()
+            .then((updatedDoc) => {
+                return res.status(httpStatus.OK).send(updatedDoc)
+            })
+            .catch((e) => { res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error : "couldn't be registered" }) });
+    })
+    .catch((e) => { res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error : "couldn't be registered" }) });
+}
+
  module.exports = {
      create,
      index,
      update,
-     deleteTask
+     deleteTask,
+     makeComment
  }
