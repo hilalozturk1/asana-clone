@@ -8,10 +8,17 @@ const createValidation = Joi.object({
 
 const updateValidation = Joi.object({
     title: Joi.string().min(5),
-    due_date: Joi.date()
+    due_date: Joi.date(),
+    statuses: Joi.array(),
+    comments : Joi.array()
+});
+
+const commentValidation = Joi.object({
+    comment: Joi.string(),
 });
 
 module.exports = {
     createValidation,
-    updateValidation
+    updateValidation,
+    commentValidation
 }
