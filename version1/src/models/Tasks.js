@@ -28,19 +28,12 @@ const TaskSchema = new Mongoose.Schema({
     isCompleted : Boolean,
     comments : [
         {
-            value : String,
-            created_at : Date,
-            updated_at : Date,
+            comment : String,
+            commented_at : Date,
             user_id : {
                 type : Mongoose.Types.ObjectId,
                 ref : "user"
-            },
-            liked : [
-                {
-                    type : Mongoose.Types.ObjectId,
-                    ref : "user"
-                },
-            ]
+            }
         }
     ],
     media : [ String ],
