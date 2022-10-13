@@ -1,5 +1,9 @@
 const Task = require("../models/Tasks")
 
+const findOne = (where) => {
+    return Task.findOne(where);
+}
+
 const insert = (data) => {
     const Tasks = new Task(data);
     return Tasks.save();
@@ -25,5 +29,6 @@ module.exports = {
     insert,
     list,
     modify,
-    remove
+    remove,
+    findOne
 }
