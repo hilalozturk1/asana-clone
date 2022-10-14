@@ -1,5 +1,7 @@
 const { insert, list, modify, remove, findOne } = require("../services/Tasks");
 const httpStatus = require("http-status");
+const Mongoose = require("mongoose");
+
 const create = (req, res) => {
     req.body.user_id = req.user;
     insert(req.body)
@@ -66,10 +68,25 @@ const makeComment = (req, res) => {
     .catch((e) => { res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error : "couldn't be registered" }) });
 }
 
+const deleteComment = (req, res) => {
+    findOne({ _id : req.params.id }).then((mainTask) => {
+        if(!mainTask) return res.status(httpStatus.NOT_FOUND).send({message: "couldn't find this task"})
+        mainTask.comments = mainTask.comments.filter((c) => c._id?.toString() !== req.params.commentId);
+        mainTask
+        .save()
+        .then((updatedDoc) => {
+            return res.status(httpStatus.OK).send(updatedDoc);
+        })
+        .catch((e) => { res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error : "couldn't be registered" }) });
+    })
+    .catch((e) => { res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error : "couldn't be registered" }) });
+}
+
  module.exports = {
      create,
      index,
      update,
      deleteTask,
-     makeComment
+     makeComment,
+     deleteComment
  }
