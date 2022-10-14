@@ -71,13 +71,19 @@ const makeComment = (req, res) => {
 const deleteComment = (req, res) => {
     findOne({ _id : req.params.id }).then((mainTask) => {
         if(!mainTask) return res.status(httpStatus.NOT_FOUND).send({message: "couldn't find this task"})
-        mainTask.comments = mainTask.comments.filter((c) => c._id?.toString() !== req.params.commentId);
-        mainTask
-        .save()
-        .then((updatedDoc) => {
-            return res.status(httpStatus.OK).send(updatedDoc);
-        })
-        .catch((e) => { res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error : "couldn't be registered" }) });
+        const isCommentId = mainTask.comments.find((e) => e._id?.toString() === req.params.commentId);
+        if( isCommentId ) {
+            mainTask.comments = mainTask.comments.filter((c) => c._id?.toString() !== req.params.commentId);
+            mainTask
+            .save()
+            .then((updatedDoc) => {
+                return res.status(httpStatus.OK).send(updatedDoc);
+            })
+            .catch((e) => { res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error : "couldn't be registered" }) });
+        }
+        else {
+            return res.status(httpStatus.NOT_FOUND).send({message: "couldn't find this comment id"})
+        }
     })
     .catch((e) => { res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error : "couldn't be registered" }) });
 }
