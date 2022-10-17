@@ -112,7 +112,7 @@ const addSubTask = (req,res) => {
 
 const fetchTask = (req, res) => {
     if(!req.params.id) return res.status(httpStatus.NOT_FOUND).send({message: "id information is required"})
-    findOne({ _id: req.params.id}).then((task) => {
+    findOne({ _id: req.params.id}, true).then((task) => {
         if(!task) return res.status(httpStatus.NOT_FOUND).send({message: "couldn't find this task"})
         res.status(httpStatus.OK).send(task)
     })
