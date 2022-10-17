@@ -7,6 +7,17 @@ const findOne = (where, expand) => {
             path: "user_id",
             select: "full_name email profile_image"
         })
+        .populate({
+            path: "comments",
+            populate: {
+                path: "user_id",
+                select: "full_name email profile_image"
+            }
+        })
+        .populate({
+            path: "sub_tasks",
+            select: "title sub_tasks"
+        })
     }
     return Task.findOne(where);
 }
