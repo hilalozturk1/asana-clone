@@ -88,11 +88,34 @@ const deleteComment = (req, res) => {
     .catch((e) => { res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error : "couldn't be registered" }) });
 }
 
+const addSubTask = (req,res) => {
+    if(!req.params.id) return res.status(httpStatus.NOT_FOUND).send({message: "couldn't find this task"})
+    findOne({ _id : req.params.id }).then((mainTask) => {//find one
+        if(!mainTask) return res.status(httpStatus.NOT_FOUND).send({message: "couldn't find this task"})
+        req.body.user_id = req.user;
+        insert(req.body)
+        .then((subTask) => {
+            mainTask.sub_tasks.push(subTask)
+            mainTask
+            .save()
+            .then((updatedDoc) => {
+                return res.status(httpStatus.OK).send(updatedDoc)
+            })
+            .catch((e) => { res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error : "couldn't be registered" }) });
+        })
+        .catch((e) => {
+            res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e);
+        })
+    })
+    .catch((e) => { res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error : e }) });
+}            
+
  module.exports = {
      create,
      index,
      update,
      deleteTask,
      makeComment,
-     deleteComment
+     deleteComment,
+     addSubTask
  }
