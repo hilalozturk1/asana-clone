@@ -110,6 +110,15 @@ const addSubTask = (req,res) => {
     .catch((e) => { res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error : e }) });
 }            
 
+const fetchTask = (req, res) => {
+    if(!req.params.id) return res.status(httpStatus.NOT_FOUND).send({message: "id information is required"})
+    findOne({ _id: req.params.id}).then((task) => {
+        if(!task) return res.status(httpStatus.NOT_FOUND).send({message: "couldn't find this task"})
+        res.status(httpStatus.OK).send(task)
+    })
+    .catch((e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
+}
+
  module.exports = {
      create,
      index,
@@ -117,5 +126,6 @@ const addSubTask = (req,res) => {
      deleteTask,
      makeComment,
      deleteComment,
-     addSubTask
+     addSubTask,
+     fetchTask
  }
